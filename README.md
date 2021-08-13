@@ -9,10 +9,10 @@
 
 **3rd** - Install these libraries on your Arduino IDE:
 
-*TimerOne
-Wire
-OneWire
-DallasTemperature*
+*TimerOne*\
+*Wire*\
+*OneWire*\
+*DallasTemperature*
 
 **4th** - Flash the zz_serial_arduino_1.ino, a wrapper for MultiFuncShield to accept serial commands.
 **Now your Arduino listens on serial port for multifunction shield commands.** 
