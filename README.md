@@ -29,6 +29,7 @@ Some examples of scripts using zz_serial_arduino_v1.py
 yy_script_boardtest.py*
 
 These 2 scripts use zz_serial_arduino_v1.py to interact with Arduino Multifunction shield by serial port
+Video Example: https://www.reddit.com/r/arduino/comments/p3efrt/crypto_price_update_realtime/
 
 ---------------------------------------------------------
 
