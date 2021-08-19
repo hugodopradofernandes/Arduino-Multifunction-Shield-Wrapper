@@ -71,20 +71,20 @@ def pot():
             time.sleep(0.1)
             serialmsg = serialarduino.SendComSerial(arduino,"rp")
             try:
-                if (int(serialmsg.split('_')[1]) % 2 != 0):
+                if (int(float(serialmsg.split('_')[1])) % 2 != 0):
                     serialarduino.SendComSerial(arduino,"sp:6:1")
                     serialarduino.SendComSerial(arduino,"sp:5:0")
                 else:
                     serialarduino.SendComSerial(arduino,"sp:6:0")
                     serialarduino.SendComSerial(arduino,"sp:5:1")
                 serialarduino.SendComSerial(arduino,"wr:"+serialmsg.split('_')[1])
-                if (abs(previous_value - int(serialmsg.split('_')[1]))) > 5 and (abs(previous_value - int(serialmsg.split('_')[1]))) < 10:
+                if (abs(previous_value - int(float(serialmsg.split('_')[1])))) > 5 and (abs(previous_value - int(float(serialmsg.split('_')[1])))) < 10:
                     serialarduino.SendComSerial(arduino,"led:1:1")
-                elif (abs(previous_value - int(serialmsg.split('_')[1]))) > 10:
+                elif (abs(previous_value - int(float(serialmsg.split('_')[1])))) > 10:
                     serialarduino.SendComSerial(arduino,"led:3:1")
                 else:
                     serialarduino.SendComSerial(arduino,"led:15:0")
-                previous_value = int(serialmsg.split('_')[1])
+                previous_value = int(float(serialmsg.split('_')[1]))
             except IndexError:
                 pass
             
@@ -101,23 +101,23 @@ def analog():
             time.sleep(0.1)
             serialmsg = serialarduino.SendComSerial(arduino,"ra")
             try:
-                if (int(serialmsg.split('_')[1]) % 2 != 0):
+                if (int(float(serialmsg.split('_')[1])) % 2 != 0):
                     serialarduino.SendComSerial(arduino,"sp:6:1")
                     serialarduino.SendComSerial(arduino,"sp:5:0")
                 else:
                     serialarduino.SendComSerial(arduino,"sp:6:0")
                     serialarduino.SendComSerial(arduino,"sp:5:1")
                 serialarduino.SendComSerial(arduino,"wr:"+serialmsg.split('_')[1])
-                if (abs(previous_value - int(serialmsg.split('_')[1]))) > 5 and (abs(previous_value - int(serialmsg.split('_')[1]))) < 250:
+                if (abs(previous_value - int(float(serialmsg.split('_')[1])))) > 5 and (abs(previous_value - int(float(serialmsg.split('_')[1])))) < 250:
                     serialarduino.SendComSerial(arduino,"led:1:1")
-                elif (abs(previous_value - int(serialmsg.split('_')[1]))) > 250:
+                elif (abs(previous_value - int(float(serialmsg.split('_')[1])))) > 250:
                     serialarduino.SendComSerial(arduino,"led:3:1")
                 else:
                     serialarduino.SendComSerial(arduino,"led:15:0")
-                previous_value = int(serialmsg.split('_')[1])
+                previous_value = int(float(serialmsg.split('_')[1]))
             except IndexError:
                 pass
-            
+
     except KeyboardInterrupt:
         print("\nRead analog interrupted")
         pass
@@ -131,26 +131,50 @@ def temp():
             time.sleep(0.1)
             serialmsg = serialarduino.SendComSerial(arduino,"gt")
             try:
-                if (float(serialmsg.split('_')[1]) % 2 != 0):
+                if (int(float(serialmsg.split('_')[1])) % 2 != 0):
                     serialarduino.SendComSerial(arduino,"sp:6:1")
                     serialarduino.SendComSerial(arduino,"sp:5:0")
                 else:
                     serialarduino.SendComSerial(arduino,"sp:6:0")
                     serialarduino.SendComSerial(arduino,"sp:5:1")
                 serialarduino.SendComSerial(arduino,"wr:"+serialmsg.split('_')[1])
-                if (abs(previous_value - float(serialmsg.split('_')[1]))) > .5 and (abs(previous_value - float(serialmsg.split('_')[1]))) < 1:
+                if (abs(previous_value - int(float(serialmsg.split('_')[1])))) > .5 and (abs(previous_value - int(float(serialmsg.split('_')[1])))) < 1:
                     serialarduino.SendComSerial(arduino,"led:1:1")
-                elif (abs(previous_value - float(serialmsg.split('_')[1]))) > 1:
+                elif (abs(previous_value - int(float(serialmsg.split('_')[1])))) > 1:
                     serialarduino.SendComSerial(arduino,"led:3:1")
                 else:
                     serialarduino.SendComSerial(arduino,"led:15:0")
-                previous_value = float(serialmsg.split('_')[1])
+                previous_value = int(float(serialmsg.split('_')[1]))
             except IndexError:
                 pass
             
     except KeyboardInterrupt:
         print("\nRead temp interrupted")
         pass
+
+#----------------------------------------------------------------------------------------------------
+def count_7segment(first=0,second=9999,wait=0,beep=0):
+    if first > second:
+        start = second
+        end = first + 1
+        reverse = True
+        count = 0
+    else:
+        start = first
+        end = second + 1
+        reverse = False
+    for z in range(start,end):
+        if reverse == True:
+            count += 1
+            i = end - count
+        else: i = z
+        if i < 10: serialarduino.SendComSerial(arduino,"wr:   "+str(i))
+        if i < 100 and i >= 10: serialarduino.SendComSerial(arduino,"wr:  "+str(i))
+        if i < 1000 and i >= 100: serialarduino.SendComSerial(arduino,"wr: "+str(i))
+        if i >= 1000: serialarduino.SendComSerial(arduino,"wr:"+str(i))
+        if beep > 0 and i % beep == 0: serialarduino.SendComSerial(arduino,"beep:10:1:1:1:1")
+        serialarduino.SendComSerial(arduino,"wait:"+str(wait))
+
 #----------------------------------------------------------------------------------------------------
 def close():
     serialarduino.SendComSerial(arduino,"cl:0") 
@@ -167,11 +191,14 @@ if __name__ == '__main__':
 #    button_press()
 
 #    text="'The quick brown fox jumps over the lazy dog ?!'"
-#    banner(text,150)
+#    banner(text,150,2)
 
     pot()
     analog()
     temp()
+
+#    count_7segment(50,12,100,10)
+#    count_7segment(131,144,100,10)
 
     close()
 #----------------------------------------------------------------------------------------------------
