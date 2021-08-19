@@ -77,7 +77,8 @@ def pot():
                 else:
                     serialarduino.SendComSerial(arduino,"sp:6:0")
                     serialarduino.SendComSerial(arduino,"sp:5:1")
-                serialarduino.SendComSerial(arduino,"wr:"+serialmsg.split('_')[1])
+                if serialmsg.split('_')[0].split('@@')[1] == 'pot':
+                    serialarduino.SendComSerial(arduino,"wr:"+serialmsg.split('_')[1])
                 if (abs(previous_value - int(float(serialmsg.split('_')[1])))) > 5 and (abs(previous_value - int(float(serialmsg.split('_')[1])))) < 10:
                     serialarduino.SendComSerial(arduino,"led:1:1")
                 elif (abs(previous_value - int(float(serialmsg.split('_')[1])))) > 10:
@@ -107,7 +108,8 @@ def analog():
                 else:
                     serialarduino.SendComSerial(arduino,"sp:6:0")
                     serialarduino.SendComSerial(arduino,"sp:5:1")
-                serialarduino.SendComSerial(arduino,"wr:"+serialmsg.split('_')[1])
+                if serialmsg.split('_')[0].split('@@')[1] == 'analog':
+                    serialarduino.SendComSerial(arduino,"wr:"+serialmsg.split('_')[1])
                 if (abs(previous_value - int(float(serialmsg.split('_')[1])))) > 5 and (abs(previous_value - int(float(serialmsg.split('_')[1])))) < 250:
                     serialarduino.SendComSerial(arduino,"led:1:1")
                 elif (abs(previous_value - int(float(serialmsg.split('_')[1])))) > 250:
@@ -137,7 +139,8 @@ def temp():
                 else:
                     serialarduino.SendComSerial(arduino,"sp:6:0")
                     serialarduino.SendComSerial(arduino,"sp:5:1")
-                serialarduino.SendComSerial(arduino,"wr:"+serialmsg.split('_')[1])
+                if serialmsg.split('_')[0].split('@@')[1] == 'temp':
+                    serialarduino.SendComSerial(arduino,"wr:"+serialmsg.split('_')[1])
                 if (abs(previous_value - int(float(serialmsg.split('_')[1])))) > .5 and (abs(previous_value - int(float(serialmsg.split('_')[1])))) < 1:
                     serialarduino.SendComSerial(arduino,"led:1:1")
                 elif (abs(previous_value - int(float(serialmsg.split('_')[1])))) > 1:
