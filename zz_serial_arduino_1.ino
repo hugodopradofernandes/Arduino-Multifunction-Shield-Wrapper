@@ -107,16 +107,18 @@ void process_data (char * data)
       {
         pinMode(0, INPUT);
         Serial.flush();
+        float analog = analogRead(0);
         Serial.print(F("@@pot_"));
-        Serial.print(analogRead(0) + '0');
+        Serial.print(analog);
       }
       // ------------- readanalog -------------
       else if ((strcmp(command,"readanalog")==0)||(strcmp(command,"ra")==0))
       {
         pinMode(A5, INPUT);
         Serial.flush();
+        float analog = analogRead(A5);
         Serial.print(F("@@analog_"));
-        Serial.print(analogRead(A5) + '0');
+        Serial.print(analog);
       }
       // ------------- setpin -------------
       else if ((strcmp(command,"setpin")==0)||(strcmp(command,"sp")==0))
