@@ -20,13 +20,13 @@ Send [help] to Arduino to list acepted commands and parameters
     [Commands: delay, write, blink, clear, led, blinkled, beep, readpot, setpin, readanalog, gettemp]
     Also a serial output is sent displaying button press/longpress/release
 
-**4th** - Use directly or import **zz_serial_arduino_v1.py**, the python script to write commands on serial port to interact with the wrapper installed on Arduino
+**4th** - Use directly or import **zz_wrapper_arduinoMF_v1.py**, the python script to write commands on serial port to interact with the wrapper installed on Arduino
 
-Some examples of scripts using zz_serial_arduino_v1.py
+Some examples of scripts importing zz_wrapper_arduinoMF_v1.py
 *yy_script_btcethprice.py
 yy_script_boardtest.py*
 
-These 2 scripts use zz_serial_arduino_v1.py to interact with Arduino Multifunction shield by serial port
+These 2 scripts import zz_wrapper_arduinoMF_v1.py to interact with Arduino Multifunction shield by serial port
 Video Example: https://www.reddit.com/r/arduino/comments/p3efrt/crypto_price_update_realtime/
 
 ---------------------------------------------------------
