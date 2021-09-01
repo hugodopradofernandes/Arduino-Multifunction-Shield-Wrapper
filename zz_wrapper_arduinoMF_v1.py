@@ -40,6 +40,7 @@ def StatusComSerial(arduino):
 
 #----------------------------------------------------------------------------------------------------
 def SendComSerial(arduino,user_inp=''):
+    arduino.reset_input_buffer()
     arduino.write(bytes(user_inp+'\n', 'utf-8'))
     serialmsg = arduino.readline()
     serial_return=("#" + arduino.name + ": " + serialmsg.decode().rstrip())
