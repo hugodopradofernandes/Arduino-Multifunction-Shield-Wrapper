@@ -95,15 +95,13 @@
     function function_dropdown(item)
     {
         document.getElementById('form_3').value=item
-        var functions_attributes_1 = '{{ list_4[0] }}';
-        var functions_attributes_2 = '{{ list_4[1] }}';
-        document.getElementById('form_4').value=functions_attributes_2
-        
-        if (item.includes("MFbanner")) 
-            document.getElementById('form_4').value=functions_attributes_1
-        else if  (item.includes("MFcount_7segment")) 
-            document.getElementById('form_4').value=functions_attributes_2
-        
+        if (item.includes("{{ list_2[0] }}")) 
+            document.getElementById('form_4').value='{{ list_4[0] }}'
+        else if  (item.includes("{{ list_2[1] }}")) 
+            document.getElementById('form_4').value='{{ list_4[1] }}'
+        else if  (item.includes("{{ list_2[2] }}")) 
+            document.getElementById('form_4').value='{{ list_4[2] }}'
+            
         return false
     }
 </script>
