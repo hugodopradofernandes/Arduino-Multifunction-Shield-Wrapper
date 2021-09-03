@@ -65,7 +65,11 @@ def MFLedShow():
         serialarduino.SendComSerial(arduino,"ld:"+str(i)+":1")
         time.sleep(.5)
         serialarduino.SendComSerial(arduino,"cl")
-  
+
+#----------------------------------------------------------------------------------------------------
+def ReadComSerial():
+    serialmessage = serialarduino.ReadComSerial(arduino)
+    return serialmessage
 #----------------------------------------------------------------------------------------------------
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'AvQvRBTiZfv8jGdGUHFXjUZMZDQ8GZt1'
@@ -79,8 +83,8 @@ def index():
     var_2 = "Functions_arduinoMF"
     arduino_commands = serialarduino.SendComSerial(arduino,'help')
     commands_attributes = "Use Help:Command to view available parameters"
-    arduino_functions = ['MFbanner','MFcount_7segment','MFLedShow']
-    functions_attributes = ['Text banner test:150:2','100:0:150:10','']
+    arduino_functions = ['MFbanner','MFcount_7segment','MFLedShow','ReadComSerial']
+    functions_attributes = ['Text banner test:150:2','100:0:150:10','','']
     list_1 = str(arduino_commands).split("Commands:")[1].replace(' ','').split(",")
     list_2 = arduino_functions
     list_3 = commands_attributes
@@ -133,7 +137,18 @@ def ajax_request_2():
             function_response = 'MFcount_7segment Not Ok'
             pass
     elif form_value_3 == 'MFLedShow':
-        MFLedShow()
+        try:
+            MFLedShow()
+            function_response = 'MFLedShow Ok'
+        except:
+            function_response = 'MFLedShow Not Ok'
+            pass
+    elif form_value_3 == 'ReadComSerial':
+        try:
+            function_response = ReadComSerial()
+        except:
+            function_response = 'ReadComSerial Not Ok'
+            pass
     else:
         function_response = 'InvalidCommand'
     
