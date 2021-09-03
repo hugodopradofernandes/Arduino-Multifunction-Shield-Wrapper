@@ -3,6 +3,7 @@
 #----------------------------------------------------------------------------------------------------
 try:
     import sys
+    import time
     import datetime
     import logging
     sys.path.insert(0, '..')
@@ -56,6 +57,16 @@ def MFcount_7segment(first=0,second=9999,wait=100,beep=0):
         serialarduino.SendComSerial(arduino,"wait:"+str(wait))
 
 #----------------------------------------------------------------------------------------------------
+def MFLedShow():
+    for i in range(1,16):
+        if i < 10: txt_spaces='   '
+        if i >= 10: txt_spaces='  '
+        serialarduino.SendComSerial(arduino,"wr:"+txt_spaces+str(i))
+        serialarduino.SendComSerial(arduino,"ld:"+str(i)+":1")
+        time.sleep(.5)
+        serialarduino.SendComSerial(arduino,"cl")
+  
+#----------------------------------------------------------------------------------------------------
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'AvQvRBTiZfv8jGdGUHFXjUZMZDQ8GZt1'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -68,13 +79,14 @@ def index():
     var_2 = "Functions_arduinoMF"
     arduino_commands = serialarduino.SendComSerial(arduino,'help')
     commands_attributes = "Use Help:Command to view available parameters"
-    arduino_functions = ['MFbanner','MFcount_7segment']
-    functions_attributes = ['Text banner test:150:2','100:0:150:10']
+    arduino_functions = ['MFbanner','MFcount_7segment','MFLedShow']
+    functions_attributes = ['Text banner test:150:2','100:0:150:10','']
     list_1 = str(arduino_commands).split("Commands:")[1].replace(' ','').split(",")
     list_2 = arduino_functions
     list_3 = commands_attributes
     list_4 = functions_attributes
     return render_template('ff_wrapper_arduinoMF.html', tile=tile, var_1=var_1, var_2=var_2, list_1=list_1, list_2=list_2, list_3=list_3, list_4=list_4)
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
@@ -109,7 +121,6 @@ def ajax_request_2():
         except:
             function_response = 'MFbanner Not Ok'
             pass
-        
     elif form_value_3 == 'MFcount_7segment':
         try:
             attr_1 = int(form_value_4.split(":")[0])
@@ -121,6 +132,8 @@ def ajax_request_2():
         except:
             function_response = 'MFcount_7segment Not Ok'
             pass
+    elif form_value_3 == 'MFLedShow':
+        MFLedShow()
     else:
         function_response = 'InvalidCommand'
     
