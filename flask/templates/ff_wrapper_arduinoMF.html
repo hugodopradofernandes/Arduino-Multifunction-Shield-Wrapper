@@ -79,7 +79,7 @@
                 }
             }
         }
-    
+        
         document.getElementById('responseDiv_3').className = 'alert alert-info'
         document.getElementById('responseDiv_3').innerHTML = 'Waiting function to finish...'
         req.open('POST', '/Functions_arduinoMF')
@@ -101,7 +101,8 @@
             document.getElementById('form_4').value='{{ list_4[1] }}'
         else if  (item.includes("{{ list_2[2] }}")) 
             document.getElementById('form_4').value='{{ list_4[2] }}'
-            
+        else if  (item.includes("{{ list_2[3] }}")) 
+            document.getElementById('form_4').value='{{ list_4[3] }}'
         return false
     }
 </script>
@@ -149,7 +150,7 @@
                         <input type="text" class="form-control" id="form_2" aria-describedby="form_2_help" placeholder="Enter attributes">
                         <small id="form_2_help" class="form-text text-muted">Enter the attributes separated by ":"</small>
                         <br><br>
-                        <button type="submit" class="btn btn-primary" onclick="return loadXMLDoc_1()">
+                        <button type="submit" class="btn btn-primary" onclick="return loadXMLDoc_1()" id="submit_1">
                             <b>Send</b> 
                             <i class="bi bi-play-circle-fill"></i>
                         </button>
@@ -208,7 +209,7 @@
                     <input type="text" class="form-control" id="form_4" aria-describedby="form_4_help" placeholder="Enter attributes">
                     <small id="form_4_help" class="form-text text-muted">Enter the attributes separated by ":"</small>
                     <br><br>
-                    <button type="submit" class="btn btn-primary" onclick="return loadXMLDoc_2()">
+                    <button type="submit" class="btn btn-primary" onclick="return loadXMLDoc_2()" id="submit_2">
                         <b>Send</b>
                         <i class="bi bi-play-circle-fill"></i>
                     </button>
