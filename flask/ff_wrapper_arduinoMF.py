@@ -64,7 +64,7 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 @app.route('/')
 def index():
     tile = "ArduinoMF App"
-    var_1 = "wrapper_arduinoMF"
+    var_1 = "Wrapper_arduinoMF"
     var_2 = "Functions_arduinoMF"
     arduino_commands = serialarduino.SendComSerial(arduino,'help')
     commands_attributes = "Use Help:Command to view available parameters"
