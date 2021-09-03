@@ -8,7 +8,7 @@ try:
     sys.path.insert(0, '..')
     import zz_wrapper_arduinoMF_v1 as serialarduino
     import subprocess
-    from flask import (Flask, request, jsonify, render_template)
+    from flask import (Flask, request, jsonify, render_template, send_from_directory)
 except:
     print(sys.exc_info())
 
@@ -75,7 +75,10 @@ def index():
     list_3 = commands_attributes
     list_4 = functions_attributes
     return render_template('ff_wrapper_arduinoMF.html', tile=tile, var_1=var_1, var_2=var_2, list_1=list_1, list_2=list_2, list_3=list_3, list_4=list_4)
-        
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 #----------------------------------------------------------------------------------------------------
 @app.route('/wrapper_arduinoMF', methods = ['POST'])
 def ajax_request_1():
@@ -126,6 +129,7 @@ def ajax_request_2():
     
     response_value = {'function_response': function_response, 'log_tail': '<hr>'+log_tail}
     return jsonify(response_value=response_value)
+
 #----------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
