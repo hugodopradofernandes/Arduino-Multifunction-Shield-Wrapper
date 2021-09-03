@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+<title>{% block title %}{{ tile }}{% endblock %}</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+
+ 
+<script>
+
+    function loadXMLDoc_1()
+    {
+        var req = new XMLHttpRequest()
+        req.onreadystatechange = function()
+        {
+            if (req.readyState == 4)
+            {
+                if (req.status != 200)
+                {
+                    //error handling code here
+                }
+                else
+                {
+                    var response = JSON.parse(req.responseText)
+                    document.getElementById('responseDiv_1').innerHTML = response.response_value.arduino_response
+                    if (response.response_value.arduino_response.includes("CMDInvalid")) 
+                    {document.getElementById('responseDiv_1').className = 'alert alert-warning'}
+                    else
+                    {document.getElementById('responseDiv_1').className = 'alert alert-success'}
+                    document.getElementById('responseDiv_2').innerHTML = response.response_value.log_tail
+                }
+            }
+        }
+        
+        document.getElementById('responseDiv_1').className = 'alert alert-info'
+        document.getElementById('responseDiv_1').innerHTML = 'Waiting function to finish...'
+        req.open('POST', '/wrapper_arduinoMF')
+        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+        var value_1 = document.getElementById('form_1').value
+        var value_2 = document.getElementById('form_2').value
+        var postVars = 'form_value_1='+value_1+'&form_value_2='+value_2
+        req.send(postVars)
+        
+        return false
+    }
+    
+    function loadXMLDoc_2()
+    {
+        var req = new XMLHttpRequest()
+        req.onreadystatechange = function()
+        {
+            if (req.readyState == 4)
+            {
+                if (req.status != 200)
+                {
+                    //error handling code here
+                }
+                else
+                {
+                    var response = JSON.parse(req.responseText)
+                    document.getElementById('responseDiv_3').innerHTML = response.response_value.function_response
+                    if (response.response_value.function_response.includes("InvalidCommand")) 
+                    {document.getElementById('responseDiv_3').className = 'alert alert-warning'}
+                    else if (response.response_value.function_response.includes("Not Ok")) 
+                    {document.getElementById('responseDiv_3').className = 'alert alert-danger'}
+                    else
+                    {document.getElementById('responseDiv_3').className = 'alert alert-success'}
+                    document.getElementById('responseDiv_4').innerHTML = response.response_value.log_tail
+                }
+            }
+        }
+    
+        document.getElementById('responseDiv_3').className = 'alert alert-info'
+        document.getElementById('responseDiv_3').innerHTML = 'Waiting function to finish...'
+        req.open('POST', '/Functions_arduinoMF')
+        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+        var value_3 = document.getElementById('form_3').value
+        var value_4 = document.getElementById('form_4').value
+        var postVars = 'form_value_3='+value_3+'&form_value_4='+value_4
+        req.send(postVars)
+        
+        return false
+    }
+    
+    function function_dropdown(item)
+    {
+        document.getElementById('form_3').value=item
+        var functions_attributes_1 = '{{ list_4[0] }}';
+        var functions_attributes_2 = '{{ list_4[1] }}';
+        document.getElementById('form_4').value=functions_attributes_2
+        
+        if (item.includes("MFbanner")) 
+            document.getElementById('form_4').value=functions_attributes_1
+        else if  (item.includes("MFcount_7segment")) 
+            document.getElementById('form_4').value=functions_attributes_2
+        
+        return false
+    }
+</script>
+
+</head>
+
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col align-self-center">
+        <div class="accordion" id="accordion_1">
+            
+            <!-- Accordion item 1 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <div class="d-flex align-items-center">
+                    <h1><i class="bi bi-cpu" style="color: #262626;"></i></h1>
+                    <p class="fs-1">&nbsp|&nbsp{{ var_1 }}</p>
+                    </div>
+                </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordion_1">
+                <div class="accordion-body">
+
+                <p class="fs-4">Commands to run on Arduino MF</p>
+                <p class="fs-6">Send a command to Arduino MF shield</p>
+                
+                    <!-- Form 1 -->
+                    <div class="form-group">
+                    <form action="" method="POST">
+                        <label for="form_1"><b>Command:</b></label>
+                        <input type="text" class="form-control" id="form_1" aria-describedby="form_1_help" placeholder="Enter command">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Quick Selection</button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                {% for item in list_1 %}
+                                    <li><a class="dropdown-item" href="#" onClick="document.getElementById('form_1').value='{{ item }}';document.getElementById('form_2').value=''">{{ item }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <small id="form_1_help" class="form-text text-muted">{{ list_3 }}</small>
+                        <br><br>
+                        <label for="form_2"><b>Atrribute:</b></label>
+                        <input type="text" class="form-control" id="form_2" aria-describedby="form_2_help" placeholder="Enter attributes">
+                        <small id="form_2_help" class="form-text text-muted">Enter the attributes separated by ":"</small>
+                        <br><br>
+                        <button type="submit" class="btn btn-primary" onclick="return loadXMLDoc_1()">
+                            <b>Send</b> 
+                            <i class="bi bi-play-circle-fill"></i>
+                        </button>
+                    </form>
+                    </div>
+                    
+                    <br>
+                    <div class="row justify-content-center">
+                        <div class="col align-self-center">
+                            <div class="card">
+                                <div class="card-body">
+                                    <p class="card-title fs-4">Response:</p>
+                                    <div id="responseDiv_1" class="alert alert-secondary" role="alert">Waiting command</div>
+                                    <div id="responseDiv_2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+            </div>
+        </div>
+        
+        <!-- Accordion item 2 -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    <div class="d-flex align-items-center">
+                    <h1><i class="bi bi-file-earmark-code" style="color: #262626;"></i></h1>
+                    <p class="fs-1">&nbsp|&nbsp{{ var_2 }}</p>
+                    </div>
+            </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion_1">
+            <div class="accordion-body">
+                
+                <p class="fs-4">Functions to run on Arduino MF</p>
+                <p class="fs-6">Send a function to Arduino MF shield</p>
+                
+                <!-- Form 2 -->
+                <div class="form-group">
+                <form action="" method="POST">
+                    <label for="form_3"><b>Function:</b></label>
+                    <input type="text" class="form-control" id="form_3" aria-describedby="form_3_help" placeholder="Enter function">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Quick Selection</button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            {% for item in list_2 %}
+                                <li><a class="dropdown-item" href="#" onClick="return function_dropdown('{{ item }}')">{{ item }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <small id="form_3_help" class="form-text text-muted">Enter the Python function to run on Arduino</small>
+                    <br><br>
+                    <label for="form_4"><b>Atrribute:</b></label>
+                    <input type="text" class="form-control" id="form_4" aria-describedby="form_4_help" placeholder="Enter attributes">
+                    <small id="form_4_help" class="form-text text-muted">Enter the attributes separated by ":"</small>
+                    <br><br>
+                    <button type="submit" class="btn btn-primary" onclick="return loadXMLDoc_2()">
+                        <b>Send</b>
+                        <i class="bi bi-play-circle-fill"></i>
+                    </button>
+                </form>
+                </div>
+                
+                <br>
+                <div class="row justify-content-center">
+                    <div class="col align-self-center">
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-title fs-4">Response:</p>
+                                <div id="responseDiv_3" class="alert alert-secondary" role="alert">Waiting command</div>
+                                <div id="responseDiv_4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    
+            </div>
+            </div>
+        </div>
+        
+        </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+<title>{% block title %}{{ tile }}{% endblock %}</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+
+ 
+<script>
+
+    function loadXMLDoc_1()
+    {
+        var req = new XMLHttpRequest()
+        req.onreadystatechange = function()
+        {
+            if (req.readyState == 4)
+            {
+                if (req.status != 200)
+                {
+                    //error handling code here
+                }
+                else
+                {
+                    var response = JSON.parse(req.responseText)
+                    document.getElementById('responseDiv_1').innerHTML = response.response_value.arduino_response
+                    if (response.response_value.arduino_response.includes("CMDInvalid")) 
+                    {document.getElementById('responseDiv_1').className = 'alert alert-warning'}
+                    else
+                    {document.getElementById('responseDiv_1').className = 'alert alert-secondary'}
+                    document.getElementById('responseDiv_2').innerHTML = response.response_value.log_tail
+                }
+            }
+        }
+    
+        req.open('POST', '/ajax')
+        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+        var value_1 = document.getElementById('form_1').value
+        var value_2 = document.getElementById('form_2').value
+        var postVars = 'form_value_1='+value_1+'&form_value_2='+value_2
+        req.send(postVars)
+        
+        return false
+    }
+    
+</script>
+
+</head>
+
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col align-self-center">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                    <h1><i class="bi bi-cpu" style="color: #262626;"></i></h1>
+                    <p class="fs-1">&nbsp|&nbsp{{ var_1 }}</p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Remote command test</h5>
+                    <p class="card-text">Fill the form to send commands</p>
+                    
+                    <div class="form-group">
+                    <form action="" method="POST">
+                        <label for="form_1">Command:</label>
+                        <input type="email" class="form-control" id="form_1" aria-describedby="form_1_help" placeholder="Enter command">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Quick Selection</button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                {% for item in list_1 %}
+                                    <li><a class="dropdown-item" href="#" onClick="document.getElementById('form_1').value='{{ item }}';document.getElementById('form_2').value=''">{{ item }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <small id="form_1_help" class="form-text text-muted">Enter the Arduino serial command</small>
+                        <br><br>
+                        <label for="form_2">Atrribute:</label>
+                        <input type="email" class="form-control" id="form_2" aria-describedby="form_2_help" placeholder="Enter command">
+                        <small id="form_2_help" class="form-text text-muted">Enter the attributes separated by ":"</small>
+                        <br><br>
+                        <button type="button" class="btn btn-primary" onclick="return loadXMLDoc_1()">
+                            Send 
+                            <i class="bi bi-play-circle-fill"></i>
+                        </button>
+                    </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row justify-content-center">
+        <div class="col align-self-center">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Response:</h5>
+                    <div id="responseDiv_1" class="alert alert-secondary" role="alert"></div>
+                    <div id="responseDiv_2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
