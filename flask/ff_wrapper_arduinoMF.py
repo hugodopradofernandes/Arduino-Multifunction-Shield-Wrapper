@@ -104,7 +104,7 @@ def ajax_request_1():
     arduino_response = serialarduino.SendComSerial(arduino,form_value_1+':'+form_value_2)
     
     out, err = subprocess.Popen(['tail','-30',log_filename], stdout=subprocess.PIPE).communicate() 
-    log_tail = '<br>'.join(str(e) for e in out.splitlines() if "/ttyUSB" in str(e) and "Commands:" not in str(e)).replace("b'","").replace(";'",";")
+    log_tail = '<br>'.join(str(e) for e in out.splitlines() if "/ttyUSB" in str(e) and "Commands:" not in str(e)).replace('b"','').replace(';"',';').replace('b"','').replace(';"',';').replace("b'","").replace(";'",";")
     
     response_value = {'arduino_response': arduino_response, 'log_tail': '<hr>'+log_tail}
     return jsonify(response_value=response_value)
